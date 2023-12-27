@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+  border-bottom: 1px solid #eaeaea;
+  & img {
+    margin-right: 15px;
+  }
+  & h3 {
+    margin: 0;
+  }
+  & p {
+    margin: 0;
+  }
+}
+.block {
+  display: flex;
+  align-items: center;
+}
+.title {
+  text-transform: uppercase;
+}
+.text {
+  opacity: 0.5;
+}
