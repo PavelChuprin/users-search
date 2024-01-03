@@ -8,7 +8,7 @@ const Header = () => {
         <img width={50} height={50} src="img/logo.png" alt="logo" />
         <div>
           <h3 className={styles.title}>Users-Search</h3>
-          <p className={styles.text}>поиск пользователей на GitHub</p>
+          <p className={styles.text}>search for users on GitHub</p>
         </div>
       </div>
     </header>
