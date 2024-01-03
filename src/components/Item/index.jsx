@@ -11,7 +11,7 @@ const Item = ({ user }) => {
         <h3>{user.login}</h3>
         <Button
           onClick={() => setOpenCard(!openCard)}
-          text={openCard ? "Hide full information" : "View more information"}
+          text={openCard ? "Hide details" : "See more info"}
         />
       </div>
       {openCard && (
@@ -27,7 +27,7 @@ const Item = ({ user }) => {
             <div className="d-flex justify-between align-center">
               <Button
                 onClick={() => window.open(user.html_url)}
-                text={"Go to user page"}
+                text={"Go to GitHab user page"}
               />
             </div>
           </div>

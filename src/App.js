@@ -5,12 +5,18 @@ import Sort from "./components/Sort";
 import Items from "./components/Items";
 
 function App() {
+  const [showResultsBlock, setShowResultsBlock] = React.useState(false);
+
   return (
     <div className="wrapper">
       <Header />
-      <Search />
-      <Sort />
-      <Items />
+      <Search setShowResultsBlock={setShowResultsBlock} />
+      {showResultsBlock && (
+        <>
+          <Sort />
+          <Items />
+        </>
+      )}
     </div>
   );
 }
