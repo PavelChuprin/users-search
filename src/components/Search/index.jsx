@@ -1,13 +1,17 @@
 import React from "react";
 import Button from "../Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { getUsers } from "../../api";
-import { setUsers } from "../../redux/slices/usersSlice";
+import { setTotalCount, setUsers } from "../../redux/slices/usersSlice";
+import { perPage, sortOption } from "../../constants";
+import { setSearch } from "../../redux/slices/searchSlice";
 import styles from "./Search.module.css";
 
 const Search = ({ setShowResultsBlock }) => {
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const currentPage = useSelector((state) => state.search.pageNumber);
   const dispatch = useDispatch();
 
   const {
@@ -21,8 +25,20 @@ const Search = ({ setShowResultsBlock }) => {
     const search = data.searchValue;
     try {
       if (search) {
-        await getUsers(search).then((obj) => dispatch(setUsers(obj.items)));
-        window.scrollTo(0, 0);
+        dispatch(setSearch(search));
+        await getUsers({
+          searchValue: search,
+          sort: sortOption[1],
+          perPage: perPage,
+          page: currentPage,
+        }).then((obj) => {
+          dispatch(setUsers(obj.items));
+          dispatch(setTotalCount(obj.total_count));
+        });
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
         setIsLoading(false);
         setShowResultsBlock(true);
       }

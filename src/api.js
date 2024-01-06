@@ -1,12 +1,16 @@
 import { API_URL } from "./constants";
 
-export const getUsers = async (searchValue) => {
-  return fetch(API_URL + `users?q=${searchValue}`, {
-    method: "GET",
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  }).then((response) => {
+export const getUsers = async ({ searchValue, sort, perPage, page }) => {
+  return fetch(
+    API_URL +
+      `users?q=${searchValue}&sort=repositories&order=${sort}&per_page=${perPage}&page=${page}`,
+    {
+      method: "GET",
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }
+  ).then((response) => {
     if (response.status === 200) {
       return response.json();
     }
