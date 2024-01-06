@@ -22,8 +22,8 @@
 .menu {
   position: absolute;
   border: 1px solid #eaeaea;
-  padding: 10px;
-  width: 225px;
+  padding: 15px;
+  width: 50px;
   border-radius: 20px;
   top: 55px;
   left: 10px;
@@ -35,4 +35,25 @@
 .li {
   padding: 3px;
   font-weight: bold;
+}
+
+.loader {
+  width: 17px;
+  height: 17px;
+  margin-left: 5px;
+  border: 3px solid rgb(0, 155, 119);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

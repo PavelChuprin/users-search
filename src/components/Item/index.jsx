@@ -27,7 +27,7 @@ const Item = ({ user }) => {
             <div className="d-flex justify-between align-center">
               <Button
                 onClick={() => window.open(user.html_url)}
-                text={"Go to GitHab user page"}
+                text={"View user on GitHub"}
               />
             </div>
           </div>

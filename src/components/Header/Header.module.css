@@ -17,6 +17,7 @@
 .block {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 .title {
   text-transform: uppercase;
