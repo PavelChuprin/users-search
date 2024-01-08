@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 40px;
+}
+
+.h1 {
+  font-size: 54px;
+  margin: 0;
+}
+
+.err {
+  color: rgb(0, 155, 119);
+  font-weight: bold;
+  font-size: 195px;
+  margin: 0;
+}
+
+.text {
+  font-size: 24px;
+  text-align: center;
+  color: #9c9c9c;
+  margin: 0;
+}

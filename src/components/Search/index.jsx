@@ -4,14 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { getUsers } from "../../api";
 import { setTotalCount, setUsers } from "../../redux/slices/usersSlice";
-import { perPage, sortOption } from "../../constants";
+import { perPage, valid } from "../../constants";
 import { setSearch } from "../../redux/slices/searchSlice";
 import styles from "./Search.module.css";
 
 const Search = ({ setShowResultsBlock }) => {
+  const [error, setError] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
   const currentPage = useSelector((state) => state.search.pageNumber);
+  const order = useSelector((state) => state.search.order);
   const dispatch = useDispatch();
 
   const {
@@ -28,12 +30,14 @@ const Search = ({ setShowResultsBlock }) => {
         dispatch(setSearch(search));
         await getUsers({
           searchValue: search,
-          sort: sortOption[1],
+          sort: "repositories",
+          order: order,
           perPage: perPage,
           page: currentPage,
         }).then((obj) => {
           dispatch(setUsers(obj.items));
           dispatch(setTotalCount(obj.total_count));
+          setError("");
         });
         window.scrollTo({
           top: 0,
@@ -43,7 +47,8 @@ const Search = ({ setShowResultsBlock }) => {
         setShowResultsBlock(true);
       }
     } catch (error) {
-      console.log(error);
+      setError(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -52,6 +57,7 @@ const Search = ({ setShowResultsBlock }) => {
       <div className={styles.block}>
         <h2>Enter login to find the user</h2>
 
+        {error && <div className={styles.error}>{error}</div>}
         {isLoading && <span className={styles.loader}></span>}
 
         <div className={styles.section}>
@@ -63,7 +69,7 @@ const Search = ({ setShowResultsBlock }) => {
               {...register("searchValue", {
                 required: true,
                 pattern: {
-                  value: /^[A-Za-z0-9]+$/i,
+                  value: valid,
                   message: "Only Latin letters",
                 },
               })}

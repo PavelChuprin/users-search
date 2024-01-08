@@ -3,6 +3,7 @@ import { getUsers } from "../../api";
 import { perPage, sortOption } from "../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { setUsers } from "../../redux/slices/usersSlice";
+import { setOrder } from "../../redux/slices/searchSlice";
 import styles from "./Sort.module.css";
 
 const Search = () => {
@@ -14,12 +15,14 @@ const Search = () => {
   const currentPage = useSelector((state) => state.search.pageNumber);
   const dispatch = useDispatch();
 
-  const handleSortClick = (sort) => {
+  const handleSortClick = (order) => {
     setIsLoading(true);
-    setSortText(sort);
+    setSortText(order);
+    dispatch(setOrder(order));
     getUsers({
       searchValue: searchValue,
-      sort: sort,
+      sort: "repositories",
+      order: order,
       perPage: perPage,
       page: currentPage,
     })
@@ -28,10 +31,6 @@ const Search = () => {
       })
       .catch((error) => console.log(error))
       .finally(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
         setOpenSort(false);
         setIsLoading(false);
       });
@@ -56,18 +55,15 @@ const Search = () => {
         {openSort && (
           <div className={styles.menu}>
             <ul className={styles.ul}>
-              <li
-                className={styles.li}
-                onClick={() => handleSortClick(sortOption[0])}
-              >
-                ASC
-              </li>
-              <li
-                className={styles.li}
-                onClick={() => handleSortClick(sortOption[1])}
-              >
-                DESC
-              </li>
+              {sortOption.map((item, index) => (
+                <li
+                  key={index}
+                  className={item === sortText ? styles.active : styles.li}
+                  onClick={() => handleSortClick(item)}
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
         )}
