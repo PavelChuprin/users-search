@@ -11,7 +11,7 @@
 }
 .section {
   display: flex;
-  column-gap: 10px;
+  gap: 10px;
   align-items: center;
 }
 .search {

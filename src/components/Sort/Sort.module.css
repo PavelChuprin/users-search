@@ -31,9 +31,15 @@
 .ul {
   margin: 0;
   padding: 0;
+  text-transform: uppercase;
 }
 .li {
-  padding: 3px;
+  padding-bottom: 5px;
+  font-weight: bold;
+}
+
+.active {
+  color: rgb(0, 155, 119);
   font-weight: bold;
 }
 

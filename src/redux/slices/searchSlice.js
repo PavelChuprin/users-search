@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { sortOption } from "../../constants";
 
 const initialState = {
   searchValue: "",
   pageNumber: 1,
+  order: sortOption[1],
 };
 
 export const searchSlice = createSlice({
@@ -15,9 +17,12 @@ export const searchSlice = createSlice({
     setPageNumber: (state, action) => {
       state.pageNumber = action.payload;
     },
+    setOrder: (state, action) => {
+      state.order = action.payload;
+    },
   },
 });
 
-export const { setSearch, setPageNumber } = searchSlice.actions;
+export const { setSearch, setPageNumber, setOrder } = searchSlice.actions;
 
 export default searchSlice.reducer;
