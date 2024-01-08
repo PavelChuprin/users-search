@@ -54,7 +54,8 @@
 
 - React;
 - Redux + Redux Toolkit;
-- CSS Modules.
+- CSS Modules;
+- Jest.
 
 Дополнительные вспомогательные библиотеки:
 
