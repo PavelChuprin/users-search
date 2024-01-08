@@ -13,7 +13,7 @@ const Items = () => {
         {users?.length > 0 ? (
           users.map((user) => <Item key={user.id} user={user} />)
         ) : (
-          <p>Не найдено</p>
+          <p>Not found</p>
         )}
       </div>
       {users && <Pagination />}
