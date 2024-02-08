@@ -1,32 +1,37 @@
 import React from "react";
 import ReactPaginate from "react-paginate";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { perPage } from "../../constants";
 import { setPageNumber } from "../../redux/slices/searchSlice";
 import { getUsers } from "../../api";
 import { setUsers } from "../../redux/slices/usersSlice";
+import { RootState, useAppDispatch } from "../../redux";
 import styles from "./Pagination.module.css";
 
-const Pagination = () => {
+const Pagination: React.FC = () => {
   const [pages, setPages] = React.useState(1);
   const [error, setError] = React.useState("");
 
-  const currentPage = useSelector((state) => state.search.pageNumber);
-  const totalCount = useSelector((state) => state.users.total_count);
-  const searchValue = useSelector((state) => state.search.searchValue);
-  const order = useSelector((state) => state.search.order);
-  const dispatch = useDispatch();
+  const currentPage = useSelector(
+    (state: RootState) => state.search.pageNumber
+  );
+  const totalCount = useSelector((state: RootState) => state.users.total_count);
+  const searchValue = useSelector(
+    (state: RootState) => state.search.searchValue
+  );
+  const order = useSelector((state: RootState) => state.search.order);
+  const dispatch = useAppDispatch();
 
-  const onPageChange = (page) => {
+  const onPageChange = (page: number) => {
     dispatch(setPageNumber(page));
     const totalPagesCount = Math.ceil(totalCount / perPage);
     setPages(totalPagesCount);
     getUsers({
       searchValue: searchValue,
       sort: "repositories",
-      order: order,
-      perPage: perPage,
-      page: page,
+      order: order.sortOption,
+      perPage: String(perPage),
+      page: String(page),
     })
       .then((data) => {
         dispatch(setUsers(data.items));

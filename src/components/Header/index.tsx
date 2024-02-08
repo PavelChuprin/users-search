@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Header.module.css";
 
-const Header = () => {
+const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.block} onClick={() => window.location.reload()}>
