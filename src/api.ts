@@ -1,6 +1,20 @@
 import { API_URL } from "./constants";
 
-export const getUsers = async ({ searchValue, sort, order, perPage, page }) => {
+type QueryProps = {
+  searchValue: string;
+  sort: string;
+  order: string;
+  perPage: string;
+  page: string;
+};
+
+export const getUsers = async ({
+  searchValue,
+  sort,
+  order,
+  perPage,
+  page,
+}: QueryProps) => {
   return fetch(
     API_URL +
       `search/users?q=${searchValue}&sort=${sort}&order=${order}&per_page=${perPage}&page=${page}`,

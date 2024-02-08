@@ -1,30 +1,45 @@
 import React from "react";
 import { getUsers } from "../../api";
-import { perPage, sortOption } from "../../constants";
-import { useDispatch, useSelector } from "react-redux";
+import { perPage } from "../../constants";
+import { useSelector } from "react-redux";
 import { setUsers } from "../../redux/slices/usersSlice";
-import { setOrder } from "../../redux/slices/searchSlice";
+import { setOrder, SortOptionEnum } from "../../redux/slices/searchSlice";
+import { RootState, useAppDispatch } from "../../redux";
 import styles from "./Sort.module.css";
 
-const Search = () => {
-  const [sortText, setSortText] = React.useState(sortOption[1]);
+type SortItem = {
+  name: string;
+  sortOption: SortOptionEnum;
+};
+
+export const sortList: SortItem[] = [
+  { name: "DESC", sortOption: SortOptionEnum.DESC },
+  { name: "ASC", sortOption: SortOptionEnum.ASC },
+];
+
+const Search: React.FC = () => {
   const [openSort, setOpenSort] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const searchValue = useSelector((state) => state.search.searchValue);
-  const currentPage = useSelector((state) => state.search.pageNumber);
-  const dispatch = useDispatch();
+  const searchValue = useSelector(
+    (state: RootState) => state.search.searchValue
+  );
+  const currentPage = useSelector(
+    (state: RootState) => state.search.pageNumber
+  );
+  const order = useSelector((state: RootState) => state.search.order);
 
-  const handleSortClick = (order) => {
+  const dispatch = useAppDispatch();
+
+  const handleSortClick = (obj: SortItem) => {
     setIsLoading(true);
-    setSortText(order);
-    dispatch(setOrder(order));
+    dispatch(setOrder(obj));
     getUsers({
       searchValue: searchValue,
       sort: "repositories",
-      order: order,
-      perPage: perPage,
-      page: currentPage,
+      order: obj.sortOption,
+      perPage: String(perPage),
+      page: String(currentPage),
     })
       .then((data) => {
         dispatch(setUsers(data.items));
@@ -49,19 +64,23 @@ const Search = () => {
         <p className={styles.text}>
           Sort by number of repositories:{" "}
           <span>
-            {isLoading ? <span className={styles.loader}></span> : sortText}
+            {isLoading ? <span className={styles.loader}></span> : order.name}
           </span>
         </p>
         {openSort && (
           <div className={styles.menu}>
             <ul className={styles.ul}>
-              {sortOption.map((item, index) => (
+              {sortList.map((obj, index) => (
                 <li
                   key={index}
-                  className={item === sortText ? styles.active : styles.li}
-                  onClick={() => handleSortClick(item)}
+                  onClick={() => handleSortClick(obj)}
+                  className={
+                    obj.sortOption === order.sortOption
+                      ? styles.active
+                      : styles.li
+                  }
                 >
-                  {item}
+                  {obj.name}
                 </li>
               ))}
             </ul>

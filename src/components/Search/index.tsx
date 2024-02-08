@@ -1,39 +1,51 @@
 import React from "react";
 import Button from "../Button";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { getUsers } from "../../api";
 import { setTotalCount, setUsers } from "../../redux/slices/usersSlice";
 import { perPage, valid } from "../../constants";
 import { setSearch } from "../../redux/slices/searchSlice";
+import { RootState } from "../../redux";
 import styles from "./Search.module.css";
 
-const Search = ({ setShowResultsBlock }) => {
+type TSearchProps = {
+  setShowResultsBlock: (showResultsBlock: boolean) => void;
+};
+
+type TFormValues = {
+  searchValue: string;
+};
+
+const Search: React.FC<TSearchProps> = ({ setShowResultsBlock }) => {
   const [error, setError] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const currentPage = useSelector((state) => state.search.pageNumber);
-  const order = useSelector((state) => state.search.order);
+  const currentPage = useSelector(
+    (state: RootState) => state.search.pageNumber
+  );
+  const order = useSelector((state: RootState) => state.search.order);
+
   const dispatch = useDispatch();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm();
+  } = useForm<TFormValues>();
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<TFormValues> = async (data) => {
     setIsLoading(true);
-    const search = data.searchValue;
+    const search: string = data.searchValue;
     try {
       if (search) {
         dispatch(setSearch(search));
         await getUsers({
           searchValue: search,
           sort: "repositories",
-          order: order,
-          perPage: perPage,
-          page: currentPage,
+          order: order.sortOption,
+          perPage: String(perPage),
+          page: String(currentPage),
         }).then((obj) => {
           dispatch(setUsers(obj.items));
           dispatch(setTotalCount(obj.total_count));
@@ -47,8 +59,10 @@ const Search = ({ setShowResultsBlock }) => {
         setShowResultsBlock(true);
       }
     } catch (error) {
-      setError(error.message);
-      setIsLoading(false);
+      if (error instanceof Error) {
+        setError(error.message);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -74,7 +88,11 @@ const Search = ({ setShowResultsBlock }) => {
                 },
               })}
             />
-            <Button onClick={onSubmit} text={"Find user"} disabled={!isValid} />
+            <Button
+              onClick={() => onSubmit}
+              text={"Find user"}
+              disabled={!isValid}
+            />
           </form>
           {errors?.searchValue && (
             <div className={styles.error}>

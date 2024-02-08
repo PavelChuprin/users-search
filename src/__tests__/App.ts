@@ -1,17 +1,19 @@
 import { it, expect } from "@jest/globals";
-import { perPage, sortOption } from "../constants";
+import { perPage } from "../constants";
 import "@testing-library/jest-dom";
 import searchSlices, {
   setSearch,
   setPageNumber,
   setOrder,
+  SortOptionEnum,
+  ISearchSliceState,
 } from "../redux/slices/searchSlice";
 
 it("should check the selected sorting", () => {
   const card = ["desc"];
 
-  expect(sortOption).toContain("desc");
-  expect(new Set(sortOption)).toContain("desc");
+  expect(SortOptionEnum.DESC).toContain("desc");
+  expect(new Set(SortOptionEnum.DESC)).toContain("desc");
   expect(card).toContain("desc");
 });
 
@@ -20,10 +22,13 @@ it("should check whether the number of users on the page is displayed correctly"
 });
 
 describe("UserSearch reducer", () => {
-  const initialState = {
+  const initialState: ISearchSliceState = {
     searchValue: "",
     pageNumber: 1,
-    order: sortOption[1],
+    order: {
+      name: "DESC",
+      sortOption: SortOptionEnum.DESC,
+    },
   };
 
   it("should handle setSearch()", () => {
@@ -43,7 +48,7 @@ describe("UserSearch reducer", () => {
   });
 
   it("should handle setOrder()", () => {
-    const order = sortOption[1];
+    const order = SortOptionEnum.DESC;
     const action = setOrder(order);
     const state = searchSlices(initialState, action);
 

@@ -1,9 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button/index";
 import styles from "./NotFoundPage.module.css";
 
-const NotFoundPage = () => {
+const NotFoundPage: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.h1}>Page not found!</h1>
